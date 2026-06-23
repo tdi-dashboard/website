@@ -201,6 +201,15 @@ ul.task-list li input[type="checkbox"] {
          below the heading and spans the column's (paragraph) width, instead of
          off the right edge of the screen. */
       .two-col-item h3{ position:relative; }
+
+      /* Stacking: the About section must sit above the Figures section that
+         follows it in the DOM, otherwise the Plotly chart (and its toolbar)
+         paint over the open popover regardless of the popover's own z-index.
+         #about is lifted above #figures; while a toggle is open it is lifted
+         further so the popover clears the chart entirely. */
+      #about{ position:relative; z-index:2; }
+      #figures{ position:relative; z-index:1; }
+      #about:has(details.tdi-toggle[open]){ z-index:600; }
       .tdi-toggle > summary{ list-style:none; cursor:pointer; display:inline-flex; align-items:center; }
       .tdi-toggle > summary::-webkit-details-marker{ display:none; }
       .tdi-ico{
