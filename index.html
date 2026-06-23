@@ -194,9 +194,13 @@ ul.task-list li input[type="checkbox"] {
       .tdi-toggle{
         --tdi-navy:#10365F; --tdi-blue:#1F5FA8; --tdi-blue-2:#6f9fcf;
         --tdi-gold:#C8862F; --tdi-muted:#46586a; --tdi-grey:#9aa7b2; --tdi-rule:#e4e8ec;
-        position:relative; display:inline-block; vertical-align:middle;
+        position:static; display:inline-block; vertical-align:middle;
         font-family:Georgia,'Times New Roman',serif;
       }
+      /* The heading row is the positioning context: the popover opens directly
+         below the heading and spans the column's (paragraph) width, instead of
+         off the right edge of the screen. */
+      .two-col-item h3{ position:relative; }
       .tdi-toggle > summary{ list-style:none; cursor:pointer; display:inline-flex; align-items:center; }
       .tdi-toggle > summary::-webkit-details-marker{ display:none; }
       .tdi-ico{
@@ -208,8 +212,8 @@ ul.task-list li input[type="checkbox"] {
       }
       .tdi-toggle > summary:hover .tdi-ico{ background:var(--tdi-navy); }
       .tdi-pop{
-        position:absolute; top:calc(100% + 8px); left:0; z-index:30;
-        width:min(92vw,34rem);
+        position:absolute; top:calc(100% + 8px); left:0; right:0; z-index:500;
+        width:auto;
         background:#fff; border:1px solid #e6e9ed; border-radius:8px;
         box-shadow:0 12px 32px rgba(16,40,70,.16);
         padding:1rem 1.15rem 1.15rem;
