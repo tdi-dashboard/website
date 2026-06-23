@@ -42,7 +42,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-e8bb486c33c2d481aa0f247b268cba56.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-165f5650e7cf741971d1994e29c1f9f9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-669eee1ccbe128cc0293f0dd21ada103.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -149,14 +149,12 @@ ul.task-list li input[type="checkbox"] {
   <div class="page-header-inner">
     <div class="page-header-left">
       <h1 class="page-header-title">
-        <span class="page-header-title-abbr">TDI</span>
-        <span class="page-header-title-full">Trade Deflection Index</span>
+        <span class="page-header-title-full">Trade Deflection Index (TDI)</span>
       </h1>
-      <p class="page-header-sub">
-        Monitoring the extent to which reduced Chinese exports to the U.S. market
-        are offset by increased exports of the same products to third markets,
-        since the introduction of new U.S. tariffs.
-      </p>
+    </div>
+
+    <div class="page-header-visual" aria-hidden="true">
+      <img src="assets/header-arrow.png" alt="" class="page-header-arrow">
     </div>
   </div>
 </header>
@@ -176,35 +174,163 @@ ul.task-list li input[type="checkbox"] {
     <h2 class="section-heading anchored">About the Trade Deflection Index</h2>
 
     <p class="about-lead">
-      The Trade Deflection Index (TDI) measures the extent to which reduced exports to one
-      tariff-imposing market are offset by increased exports of the same products to other
-      foreign markets. It is the ratio of the increase in exports from China to third
-      markets relative to the decrease in exports of the same products (at the HS6 level)
-      to the U.S. market, using year-on-year changes calculated on three-month moving
-      averages. In this pilot, the origin country is fixed as China and the
-      tariff-imposing country is fixed as the United States.
+      When a major trading partner imposes tariffs, the exports of affected goods may be
+      redirected towards other destinations. This reallocation of exports away from a
+      tariff-imposing market toward third-country markets, within the same product lines,
+      is known as trade deflection. The Trade Deflection Index (TDI) monitors the extent to
+      which reduced exports to the tariff-imposing market are offset by increased exports of
+      the same products to third markets. The figures presented here focus on exports
+      originating in China, tracking their reallocation to markets other than the United
+      States since the 2025 changes in U.S. trade policy.
     </p>
+
+    <!-- KaTeX (loaded once for the toggle popovers below) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+    <script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+    <script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}]});"></script>
+
+    <!-- Shared toggle styling (defined once) -->
+    <style>
+      .tdi-toggle{
+        --tdi-navy:#10365F; --tdi-blue:#1F5FA8; --tdi-blue-2:#6f9fcf;
+        --tdi-gold:#C8862F; --tdi-muted:#46586a; --tdi-grey:#9aa7b2; --tdi-rule:#e4e8ec;
+        position:relative; display:inline-block; vertical-align:middle;
+        font-family:Georgia,'Times New Roman',serif;
+      }
+      .tdi-toggle > summary{ list-style:none; cursor:pointer; display:inline-flex; align-items:center; }
+      .tdi-toggle > summary::-webkit-details-marker{ display:none; }
+      .tdi-ico{
+        display:inline-flex; align-items:center; justify-content:center;
+        width:20px; height:20px; border-radius:50%;
+        background:var(--tdi-blue); color:#fff;
+        font-style:italic; font-weight:700; font-size:.78rem; line-height:1;
+        transition:background .15s ease;
+      }
+      .tdi-toggle > summary:hover .tdi-ico{ background:var(--tdi-navy); }
+      .tdi-pop{
+        position:absolute; top:calc(100% + 8px); left:0; z-index:30;
+        width:min(92vw,34rem);
+        background:#fff; border:1px solid #e6e9ed; border-radius:8px;
+        box-shadow:0 12px 32px rgba(16,40,70,.16);
+        padding:1rem 1.15rem 1.15rem;
+        color:var(--tdi-muted); font-size:.9rem; line-height:1.6;
+      }
+      .tdi-pop .tdi-h{ margin:0 0 .5rem; font-weight:700; font-size:1.05rem; color:var(--tdi-navy); }
+      .tdi-pop .tdi-sub{ margin:0 0 .25rem; font-weight:700; color:var(--tdi-navy); }
+      .tdi-pop .katex-display{ margin:.55rem 0 .9rem; }
+      .tdi-pop dl{ margin:.4rem 0 0; display:grid; grid-template-columns:auto 1fr; gap:.15rem .8rem; }
+      .tdi-pop dt{ font-style:italic; color:var(--tdi-navy); white-space:nowrap; }
+      .tdi-pop dd{ margin:0; }
+      .tdi-div{ border:none; border-top:1px solid var(--tdi-rule); margin:1rem 0 .85rem; }
+      .tdi-scale{ width:100%; height:auto; display:block; margin:.45rem 0 .2rem; }
+      .tdi-scale-cap{ font-size:.82rem; margin:.3rem 0 0; }
+      .two-col-item h3 .tdi-toggle{ margin-left:.4rem; }
+    </style>
+    <script>
+      (function(){ if(window.__tdiPopInit) return; window.__tdiPopInit=true;
+        document.addEventListener('click',function(e){
+          document.querySelectorAll('details.tdi-toggle[open]').forEach(function(d){
+            if(!d.contains(e.target)) d.removeAttribute('open');
+          });
+        });
+      })();
+    </script>
 
     <div class="two-col-grid">
       <div class="two-col-item">
-        <h3 class="anchored">What does it measure?</h3>
+        <h3 class="anchored">What does it measure?<details class="tdi-toggle">
+          <summary aria-label="Show formal definition" title="Formal definition">
+            <span class="tdi-ico" aria-hidden="true">i</span>
+          </summary>
+          <div class="tdi-pop">
+            <p class="tdi-h">Formal definition</p>
+            $$ TDI_{p,k,t} \;=\; \frac{\Delta \bar{X}^{\,i\to k}_{p,t}}{\Delta \bar{X}^{\,i\to j}_{p,t}} $$
+            <p>
+              The numerator is the year-on-year change in exports to a third market,
+              \( \Delta \bar{X}^{\,i\to k}_{p,t} = \bar{X}^{\,i\to k}_{p,t} - \bar{X}^{\,i\to k}_{p,t-12} \).
+              The denominator is the year-on-year change in exports to the tariff-imposing market,
+              \( \Delta \bar{X}^{\,i\to j}_{p,t} = \bar{X}^{\,i\to j}_{p,t-12} - \bar{X}^{\,i\to j}_{p,t} \),
+              defined for products experiencing a decline (\( \Delta \bar{X}^{\,i\to j}_{p,t} &gt; 0 \)).
+              Written as prior minus current, the loss enters as a positive quantity, so the index is
+              positive when losses are offset by gains in third markets.
+            </p>
+            <dl>
+              <dt>\(i\)</dt><dd>origin country (China, fixed)</dd>
+              <dt>\(j\)</dt><dd>tariff-imposing country (United States, fixed)</dd>
+              <dt>\(k\)</dt><dd>third-country destination</dd>
+              <dt>\(p\)</dt><dd>product (HS 6-digit)</dd>
+              <dt>\(t\)</dt><dd>month</dd>
+              <dt>\(\bar{X}\)</dt><dd>three-month moving-average exports</dd>
+            </dl>
+          </div>
+        </details></h3>
         <p>
-          The Index is a simple metric of possible trade deflection and does not capture
-          causal relationships — other structural and non-tariff factors could drive
-          observed patterns. Trade deflection may still occur if imports are stagnant or
-          growing more slowly. Index components can be aggregated across products and
-          third countries to yield an overall estimate of total losses offset in foreign
-          markets.
+          The index is the ratio of the change in exports of a tariff-affected country to
+          third markets relative to the decrease in exports of the same products (at the
+          HS 6-digit level) to the tariff-imposing market. It is defined for products that
+          experienced losses in the tariff-imposing market to capture the idea of possible
+          trade deflection. The numerator can be positive or negative, capturing either
+          gains or losses in third markets. Changes are computed on a year-on-year basis
+          using three-month moving averages to account for seasonality and smooth
+          short-term volatility.
         </p>
       </div>
       <div class="two-col-item">
-        <h3 class="anchored">How is it interpreted?</h3>
+        <h3 class="anchored">How is it interpreted?<details class="tdi-toggle">
+          <summary aria-label="Show interpretation detail" title="Reading the index">
+            <span class="tdi-ico" aria-hidden="true">i</span>
+          </summary>
+          <div class="tdi-pop">
+            <p class="tdi-h">Reading the index</p>
+            <p class="tdi-sub">Reading the magnitude</p>
+            <p>The index value has an intuitive interpretation:</p>
+            <svg class="tdi-scale" viewbox="0 0 680 132" role="img" aria-label="Interpretation scale. Below zero: contraction across markets, no deflection. Between zero and one: possible partial deflection, offsetting part of the U.S. loss. Above one: possible strong deflection, fully offsetting or exceeding the loss.">
+              <g font-family="Georgia,'Times New Roman',serif">
+                <line x1="40" y1="52" x2="640" y2="52" stroke="#10365F" stroke-width="1.5"></line>
+                <path d="M40,52 L53,46 L53,58 Z" fill="#10365F"></path>
+                <path d="M640,52 L627,46 L627,58 Z" fill="#10365F"></path>
+                <circle cx="235" cy="52" r="4.2" fill="#1F5FA8"></circle>
+                <circle cx="405" cy="52" r="4.2" fill="#1F5FA8"></circle>
+                <text x="235" y="34" text-anchor="middle" font-size="15" fill="#10365F">0</text>
+                <text x="405" y="34" text-anchor="middle" font-size="15" fill="#10365F">1</text>
+                <path d="M44,71 L44,76 L224,76 L224,71" fill="none" stroke="#9aa7b2" stroke-width="1.2"></path>
+                <path d="M246,71 L246,76 L398,76 L398,71" fill="none" stroke="#6f9fcf" stroke-width="1.2"></path>
+                <path d="M412,71 L412,76 L636,76 L636,71" fill="none" stroke="#1F5FA8" stroke-width="1.2"></path>
+                <text x="134" y="97" text-anchor="middle" font-size="12.5" font-weight="700" fill="#10365F">No deflection</text>
+                <text x="134" y="113" text-anchor="middle" font-size="11" fill="#46586a">contraction across markets</text>
+                <text x="322" y="97" text-anchor="middle" font-size="12.5" font-weight="700" fill="#10365F">Possible partial deflection</text>
+                <text x="322" y="113" text-anchor="middle" font-size="11" fill="#46586a">offsets part of the U.S. loss</text>
+                <text x="524" y="97" text-anchor="middle" font-size="12.5" font-weight="700" fill="#10365F">Possible strong deflection</text>
+                <text x="524" y="113" text-anchor="middle" font-size="11" fill="#46586a">fully offsets or exceeds the loss</text>
+              </g>
+            </svg>
+            <hr class="tdi-div">
+            <p class="tdi-sub">Aggregating across products, markets and time</p>
+            <p>
+              Because every component shares the same denominator — total exports lost in the U.S. market —
+              the index sums cleanly across products, third markets and time:
+            </p>
+            $$ TDI_{G,T} \;=\; \frac{\displaystyle\sum_{t\in T}\ \sum_{(p,k)\in G}\ \Delta \bar{X}^{\,i\to k}_{p,t}}
+                                    {\displaystyle\sum_{t\in T}\ \sum_{p\in P}\ \Delta \bar{X}^{\,i\to j}_{p,t}} $$
+            <p>
+              where \(G\) is the grouping of interest — a sector, a country, a region, or all products and
+              destinations combined; \(P\) the full set of products that lost ground in the U.S. market;
+              and \(T\) the period. Taking \(T\) as a single month gives the index tracked over time, while
+              taking \(T\) as the whole period since February 2025 gives a cumulative figure. Because the
+              denominator runs over all loss-making products and is common to every grouping, each group's
+              value is its contribution to the total offset, and the contributions add up to the overall
+              index.
+            </p>
+          </div>
+        </details></h3>
         <p>
-          A common global denominator is used so that group-specific index values can be
-          interpreted as contributions to total offset. The upper bound estimate includes
-          all trade flows that meet the index conditions; the lower bound estimate excludes
-          changes below the 1st percentile or above the 99th percentile. Data are updated
-          periodically subject to availability.
+          The index captures, in dollar terms, the extent of offset in third markets for
+          every US$1 of exports lost in the U.S. market. Values above zero indicate
+          possible trade deflection, while negative values indicate a contraction across
+          markets. It is a simple, non-causal metric, and other structural and non-tariff
+          factors could drive observed patterns. Index components can be aggregated across
+          products, sectors, third markets and time, where a common global denominator lets
+          group-specific values be read as contributions to the total.
         </p>
       </div>
     </div>
@@ -246,10 +372,10 @@ ul.task-list li input[type="checkbox"] {
           <select id="figtype-select">
             <option value="global_tdi">Global Trade Deflection Index (Contemporaneous)</option>
             <option value="global_gainloss">Global Trade Deflection Value (bln USD)</option>
-            <option value="global_region">Global Trade Deflection Index (bln USD, by region)</option>
-            <option value="global_sector">Global Trade Deflection Index (bln USD, by sector)</option>
+            <option value="global_region">Trade Deflection Value by Region (bln USD)</option>
+            <option value="global_sector">Trade Deflection Value by Sector (bln USD)</option>
             <option value="global_interp">Global Trade Deflection Index (Cumulative)</option>
-            <option value="disagg" selected="">Trade Deflection Index by group (Cumulative)</option>
+            <option value="disagg" selected="">Trade Deflection Index by Group</option>
           </select>
           <button type="button" class="figbar-deselect" id="figbar-deselect" title="Reset all disaggregated selections" style="display:none;">Deselect all</button>
         </div>
@@ -429,7 +555,7 @@ ul.task-list li input[type="checkbox"] {
             <span class="info-icon" id="product-info-icon" tabindex="0" role="button" aria-label="About product selection">i<span class="info-pop" role="tooltip">
               <strong>Selecting products</strong>
               <span class="info-line">Products are shown at the HS4 level.</span>
-              <span class="info-line">When a sector is selected, the list is limited to products within that sector.</span>
+              <span class="info-line">When a sector is selected, the list is limited to products within that sector with none missing values.</span>
             </span></span>
           </label>
           <select id="product-select" title="Select an HS4 product">
@@ -492,11 +618,8 @@ ul.task-list li input[type="checkbox"] {
     <!-- Single chart container that morphs based on selection -->
     <div id="main-chart" class="main-chart"></div>
 
-    <!-- Per-figure note (inline under the chart, as before) -->
+    <!-- Per-figure note (inline under the chart); carries Note + Source -->
     <p class="tdi-note" id="main-note"></p>
-
-    <!-- Source line at the bottom of the section -->
-    <p class="byregion-note" id="figures-source">Source: SPR Trade Deflection Index, Trade Data Monitor.</p>
   </div>
 </section>
 

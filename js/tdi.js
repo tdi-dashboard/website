@@ -43,30 +43,67 @@
 
   // ─────────────────────────────────────────────────────────────────────────
   // NOTES
+  // Each entry separates the note body from the source line so we can render
+  // the source on its own line on screen and as a separate row in downloads.
   // ─────────────────────────────────────────────────────────────────────────
+  var SRC_LINE = 'Source: SPR Trade Deflection Index, Trade Data Monitor.';
   var NOTES = {
-    global_tdi:
-      'Note: The upper bound estimate in the top panel includes all trade flows ' +
-      'that meet the index conditions, while the baseline estimate excludes ' +
-      'changes below the 1st percentile or above the 99th percentile. ' +
-      'Source: SPR Trade Deflection Index, Trade Data Monitor.',
-    global_gainloss:
-      'Note: "Third-market gain" refers to the numerator and "Loss in the U.S." ' +
-      'refers to the denominator of the index aggregated across all products within ' +
-      'a given period. ' +
-      'Source: SPR Trade Deflection Index, Trade Data Monitor.',
-    global_region:
-      'Note: The chart decomposes third-market gains (i.e., the sum of changes in ' +
-      'Chinese exports of the same products in which they experienced losses in the ' +
-      'U.S. market) by region. ' +
-      'Source: SPR Trade Deflection Index, Trade Data Monitor.',
-    global_sector:
-      'Note: The chart decomposes third-market gains (i.e., the sum of changes in ' +
-      'Chinese exports of the same products in which they experienced losses in the ' +
-      'U.S. market) by sector. ' +
-      'Source: SPR Trade Deflection Index, Trade Data Monitor.',
-    panel: ''
+    global_tdi: {
+      note:
+        'Note: The upper bound estimate in the top panel includes all trade flows ' +
+        'that meet the index conditions, while the baseline estimate excludes ' +
+        'changes below the 1st percentile or above the 99th percentile.',
+      source: SRC_LINE
+    },
+    global_gainloss: {
+      note:
+        'Note: "Third-market gain" refers to the numerator and "Loss in the U.S." ' +
+        'refers to the denominator of the index aggregated across all products within ' +
+        'a given period.',
+      source: SRC_LINE
+    },
+    global_region: {
+      note:
+        'Note: The chart decomposes third-market gains (i.e., the sum of changes in ' +
+        'Chinese exports of the same products in which they experienced losses in the ' +
+        'U.S. market) by region.',
+      source: SRC_LINE
+    },
+    global_sector: {
+      note:
+        'Note: The chart decomposes third-market gains (i.e., the sum of changes in ' +
+        'Chinese exports of the same products in which they experienced losses in the ' +
+        'U.S. market) by sector.',
+      source: SRC_LINE
+    },
+    panel: { note: '', source: '' }
   };
+
+  // Render a {note, source} entry into the on-screen note element, with the
+  // source on its own line.
+  function setNote(entry) {
+    if (!entry || (!entry.note && !entry.source)) {
+      noteEl.textContent = '';
+      return;
+    }
+    var html = '';
+    if (entry.note)   html += escapeHTML(entry.note);
+    if (entry.source) html += (html ? '<br>' : '') + escapeHTML(entry.source);
+    noteEl.innerHTML = html;
+  }
+
+  // Build the rows (note row, then source row) appended to a downloaded sheet.
+  function noteRows(entry) {
+    var rows = [];
+    if (entry && entry.note)   rows.push([''], [entry.note]);
+    if (entry && entry.source) rows.push([entry.source]);
+    return rows;
+  }
+
+  function escapeHTML(s) {
+    return String(s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
 
   // ─────────────────────────────────────────────────────────────────────────
   // COLORS
@@ -2081,7 +2118,7 @@
       ]
     };
     Plotly.react('main-chart', traces, layout, PLOTLY_CONFIG);
-    noteEl.textContent = NOTES.global_tdi;
+    setNote(NOTES.global_tdi);
   }
 
   // Interpretation chart — visual replica of the IMF "interpretation" graphic.
@@ -2209,8 +2246,8 @@
 
     Plotly.react('main-chart', traces, layout, PLOTLY_CONFIG);
     noteEl.innerHTML =
-      '<em>Cumulative since February 2025. Range reflects sensitivity to outlier treatment. ' +
-      'Source: Trade Deflection Index based on Trade Data Monitor; IMF staff calculations.</em>';
+      '<em>Cumulative since February 2025. Range reflects sensitivity to outlier treatment.</em>' +
+      '<br><em>Source: Trade Deflection Index based on Trade Data Monitor; IMF staff calculations.</em>';
   }
 
   function renderGlobalStackedBarChart() {
@@ -2270,7 +2307,7 @@
       ]
     };
     Plotly.react('main-chart', traces, layout, PLOTLY_CONFIG);
-    noteEl.textContent = NOTES.global_gainloss;
+    setNote(NOTES.global_gainloss);
   }
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -2369,7 +2406,7 @@
       ]
     };
     Plotly.react('main-chart', traces, layout, PLOTLY_CONFIG);
-    noteEl.textContent = NOTES[noteKey];
+    setNote(NOTES[noteKey]);
   }
 
   function renderGlobalRegionStacked() {
@@ -2564,7 +2601,7 @@
       layout.margin = { l: 10, r: 30, t: 80, b: 80 };
     }
     Plotly.react('main-chart', traces, layout, PLOTLY_CONFIG);
-    noteEl.textContent = NOTES.panel;
+    setNote(NOTES.panel);
     // Refresh the dual-color legend strip ABOVE the chart. In share view we
     // hide it entirely; in TDI view we surface red/blue swatches if both
     // signs are present in the bar values.
@@ -3189,6 +3226,12 @@
       else if (state.sectors.length) parts.push('S' + state.sectors.length);
       if (isPicked(state.product)) parts.push(state.product.split(' ')[0]);
       filename = parts.join('_') + '.xlsx';
+    }
+    // Append the figure note + source (each on its own row) to the downloaded
+    // sheet, for the figure types that carry a note.
+    var noteEntry = NOTES[state.figType];
+    if (noteEntry && sheets && sheets.length) {
+      noteRows(noteEntry).forEach(function (r) { sheets[0].rows.push(r); });
     }
     downloadXLSXWorkbook(sheets, filename);
   }
