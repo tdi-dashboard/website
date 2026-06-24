@@ -50,7 +50,9 @@
   var NOTES = {
     global_tdi: {
       note:
-        'Note: The upper bound estimate in the top panel includes all trade flows ' +
+        'Note: Positive values suggest possible trade deflection and negative values, ' +
+        'a contraction across markets. See "How is it interpreted?" for further detail. ' +
+        'The upper bound estimate in the top panel includes all trade flows ' +
         'that meet the index conditions, while the baseline estimate excludes ' +
         'changes below the 1st percentile or above the 99th percentile.',
       source: SRC_LINE
@@ -1212,6 +1214,11 @@
     rowIndEl.style.display    = isGlobal ? 'none' : 'flex';
     rowShareEl.style.display  = isGlobal ? 'none' : 'flex';
     if (deselectBtn) deselectBtn.style.display = isGlobal ? 'none' : 'inline-block';
+    // The "How the selection works" info icon explains the nested
+    // (income/region/country, sector/product) controls, which only exist for
+    // the disaggregated "by Group" figure — so show it only there.
+    var figInfoIcon = document.getElementById('figure-info-icon');
+    if (figInfoIcon) figInfoIcon.style.display = isGlobal ? 'none' : 'inline-flex';
 
     if (isGlobal) return;
 
@@ -2095,7 +2102,9 @@
                x: 0.5, xanchor: 'center', y: 0.97, yanchor: 'top' },
       xaxis: { type: 'date', tickformat: '%b-%y',
                tickfont: { size: 12, family: FONT_FAMILY } },
-      yaxis: { tickfont: { size: 12, family: FONT_FAMILY },
+      yaxis: { title: { text: 'USD gained or lost in third markets per $1.00 USD<br>of exports lost in the U.S. market',
+                        font: { size: 11, family: FONT_FAMILY } },
+               tickfont: { size: 12, family: FONT_FAMILY },
                zeroline: true, zerolinecolor: '#444', zerolinewidth: 2,
                gridcolor: '#ececec' },
       legend: { orientation: 'h', x: 0, xanchor: 'left',
@@ -2103,7 +2112,7 @@
                 font: { size: 11, family: FONT_FAMILY } },
       paper_bgcolor: 'white', plot_bgcolor: 'white',
       font: { family: FONT_FAMILY },
-      margin: { l: 60, r: 25, t: 50, b: 90 },
+      margin: { l: 75, r: 25, t: 50, b: 90 },
       hovermode: 'x unified',
       shapes: [
         { type: 'line', xref: 'paper', yref: 'y',
@@ -2250,7 +2259,10 @@
 
     Plotly.react('main-chart', traces, layout, PLOTLY_CONFIG);
     noteEl.innerHTML =
-      '<em>Note: Cumulative since February 2025. Range reflects sensitivity to outlier treatment.</em>' +
+      '<em>Note: Cumulative since February 2025. Positive values suggest possible ' +
+      'trade deflection and negative values, a contraction across markets. ' +
+      'See "How is it interpreted?" for further detail. ' +
+      'Range reflects sensitivity to outlier treatment.</em>' +
       '<br><em>Source: Trade Deflection Index based on Trade Data Monitor; IMF staff calculations.</em>';
   }
 
