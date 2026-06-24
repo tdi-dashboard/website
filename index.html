@@ -41,7 +41,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-e8bb486c33c2d481aa0f247b268cba56.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-ec8d62cd0d7d095bb06b5a03af81d994.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-cee9ea569f51bdd0d1425d49df2b1577.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -223,11 +223,18 @@ ul.task-list li input[type="checkbox"] {
       .tdi-pop{
         position:absolute; top:calc(100% + 8px); z-index:500;
         left:0; right:0;
-        background:#fff; border:1px solid #e6e9ed; border-radius:8px;
+        background-color:#ffffff !important;
+        background-image:none !important;
+        opacity:1 !important;
+        backdrop-filter:none !important;
+        border:1px solid #e6e9ed; border-radius:8px;
         box-shadow:0 12px 32px rgba(16,40,70,.16);
         padding:1rem 1.15rem 1.15rem;
         color:var(--tdi-muted); font-size:.9rem; line-height:1.6;
       }
+      /* The <details> wrapper and its summary must not impose any translucent
+         backdrop behind the popover. */
+      details.tdi-toggle, details.tdi-toggle > summary{ background:transparent; }
       /* Wide popovers: extend across both columns (clamped to the section)
          instead of being trapped in one narrow column. The left-column popover
          extends rightward; the right-column popover extends leftward. This keeps
@@ -285,7 +292,7 @@ ul.task-list li input[type="checkbox"] {
           <summary aria-label="Show formal definition" title="Formal definition">
             <span class="tdi-ico" aria-hidden="true">i</span>
           </summary>
-          <div class="tdi-pop">
+          <div class="tdi-pop" style="background-color:#ffffff !important; background-image:none !important; opacity:1 !important; backdrop-filter:none !important;">
             <p class="tdi-h">Formal definition</p>
             $$ TDI_{p,k,t} \;=\; \frac{\Delta \bar{X}^{\,i\to k}_{p,t}}{\Delta \bar{X}^{\,i\to j}_{p,t}} $$
             <p>
@@ -323,7 +330,7 @@ ul.task-list li input[type="checkbox"] {
           <summary aria-label="Show interpretation detail" title="Reading the index">
             <span class="tdi-ico" aria-hidden="true">i</span>
           </summary>
-          <div class="tdi-pop">
+          <div class="tdi-pop" style="background-color:#ffffff !important; background-image:none !important; opacity:1 !important; backdrop-filter:none !important;">
             <p class="tdi-h">Reading the index</p>
             <div class="tdi-cols">
               <div class="tdi-col">
@@ -419,12 +426,12 @@ ul.task-list li input[type="checkbox"] {
             </span></span>
           </label>
           <select id="figtype-select">
-            <option value="global_tdi">Global Trade Deflection Index (Contemporaneous)</option>
-            <option value="global_gainloss">Global Trade Deflection Value (bln USD)</option>
+            <option value="global_gainloss" selected="">Global Trade Deflection Value (bln USD)</option>
             <option value="global_region">Trade Deflection Value by Region (bln USD)</option>
             <option value="global_sector">Trade Deflection Value by Sector (bln USD)</option>
+            <option value="global_tdi">Global Trade Deflection Index (Contemporaneous)</option>
             <option value="global_interp">Global Trade Deflection Index (Cumulative)</option>
-            <option value="disagg" selected="">Trade Deflection Index by Group</option>
+            <option value="disagg">Trade Deflection Index by Group</option>
           </select>
           <button type="button" class="figbar-deselect" id="figbar-deselect" title="Reset all disaggregated selections" style="display:none;">Deselect all</button>
         </div>

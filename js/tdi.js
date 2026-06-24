@@ -382,7 +382,7 @@
   //   for chart-routing.
   // ─────────────────────────────────────────────────────────────────────────
   var state = {
-    figType:   'global_tdi',
+    figType:   'global_gainloss',
     income:    ALL,            // default to "All" so the disaggregated view loads with the 3-income chart immediately
     region:    null,
     countries: [],             // array of ISOs (max 10); empty = wildcard
@@ -2104,7 +2104,7 @@
       xaxis: { type: 'date', tickformat: '%b-%y',
                tickfont: { size: 12, family: FONT_FAMILY } },
       yaxis: { tickfont: { size: 12, family: FONT_FAMILY },
-               zeroline: true, zerolinecolor: '#bbb', zerolinewidth: 1,
+               zeroline: true, zerolinecolor: '#444', zerolinewidth: 2,
                gridcolor: '#ececec' },
       legend: { orientation: 'h', x: 0, xanchor: 'left',
                 y: -0.18, yanchor: 'top',
@@ -2114,6 +2114,9 @@
       margin: { l: 60, r: 25, t: 50, b: 90 },
       hovermode: 'x unified',
       shapes: [
+        { type: 'line', xref: 'paper', yref: 'y',
+          x0: 0, x1: 1, y0: 0, y1: 0,
+          line: { color: '#444', width: 2 }, layer: 'below' },
         { type: 'line', xref: 'x', yref: 'paper',
           x0: '2025-02-01', x1: '2025-02-01', y0: 0, y1: 1,
           line: { color: '#C0392B', width: 1.8, dash: 'solid' } }
@@ -2557,7 +2560,7 @@
         title: { text: (seriesDefs.length === 1) ? seriesDefs[0].name : 'Share of TDI (%)',
                  font: { size: 12, family: FONT_FAMILY } },
         tickfont: { size: 11, family: FONT_FAMILY },
-        zeroline: true, zerolinecolor: '#bbb', zerolinewidth: 1,
+        zeroline: true, zerolinecolor: '#444', zerolinewidth: 2,
         gridcolor: '#ececec', automargin: true, ticksuffix: '%'
       };
       layout.margin = { l: 10, r: (seriesDefs.length === 1) ? 90 : 30, t: 60, b: 80 };
@@ -2590,7 +2593,7 @@
       layout.xaxis = {
         title: { text: 'TDI Index', font: { size: 12, family: FONT_FAMILY } },
         tickfont: { size: 11, family: FONT_FAMILY },
-        zeroline: true, zerolinecolor: '#bbb', zerolinewidth: 1,
+        zeroline: true, zerolinecolor: '#444', zerolinewidth: 2,
         gridcolor: '#ececec', automargin: true,
         // Avoid Plotly's SI-prefix tick formatting on very small numbers
         // (which renders 0.0001 as "100μ"). Force a 4-decimal raw format.
@@ -2609,6 +2612,12 @@
       layout.bargroupgap = 0;
       layout.margin = { l: 10, r: 30, t: 80, b: 80 };
     }
+    // Stronger reference line at index = 0 (where bars flip sign).
+    layout.shapes = (layout.shapes || []).concat([
+      { type: 'line', xref: 'x', yref: 'paper',
+        x0: 0, x1: 0, y0: 0, y1: 1,
+        line: { color: '#444', width: 2 }, layer: 'below' }
+    ]);
     Plotly.react('main-chart', traces, layout, PLOTLY_CONFIG);
     setNote(NOTES.panel);
     // Refresh the dual-color legend strip ABOVE the chart. In share view we
