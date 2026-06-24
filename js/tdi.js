@@ -67,10 +67,6 @@
         'Note: The chart decomposes third-market gains and losses (i.e., the sum of ' +
         'changes in Chinese exports of the same products in which they experienced ' +
         'losses in the U.S. market) by region.',
-      noteHtml:
-        'Note: The chart decomposes third-market gains <strong>and losses</strong> ' +
-        '(i.e., the sum of changes in Chinese exports of the same products in which ' +
-        'they experienced losses in the U.S. market) by region.',
       source: SRC_LINE
     },
     global_sector: {
@@ -78,10 +74,6 @@
         'Note: The chart decomposes third-market gains and losses (i.e., the sum of ' +
         'changes in Chinese exports of the same products in which they experienced ' +
         'losses in the U.S. market) by sector.',
-      noteHtml:
-        'Note: The chart decomposes third-market gains <strong>and losses</strong> ' +
-        '(i.e., the sum of changes in Chinese exports of the same products in which ' +
-        'they experienced losses in the U.S. market) by sector.',
       source: SRC_LINE
     },
     panel: { note: '', source: '' }
