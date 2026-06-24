@@ -2949,7 +2949,8 @@
 
   // ── Info icon hover/focus tooltips (CSS-driven; this just enables tap on mobile) ──
   var INFO_ICON_IDS = ['figure-info-icon', 'country-info-icon', 'sector-info-icon',
-                       'product-info-icon', 'toggle-info-icon'];
+                       'product-info-icon', 'toggle-info-icon',
+                       'measure-info-icon', 'interpret-info-icon'];
   INFO_ICON_IDS.forEach(function (id) {
     var el = document.getElementById(id);
     if (!el) return;
