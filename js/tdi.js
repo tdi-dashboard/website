@@ -64,16 +64,24 @@
     },
     global_region: {
       note:
-        'Note: The chart decomposes third-market gains (i.e., the sum of changes in ' +
-        'Chinese exports of the same products in which they experienced losses in the ' +
-        'U.S. market) by region.',
+        'Note: The chart decomposes third-market gains and losses (i.e., the sum of ' +
+        'changes in Chinese exports of the same products in which they experienced ' +
+        'losses in the U.S. market) by region.',
+      noteHtml:
+        'Note: The chart decomposes third-market gains <strong>and losses</strong> ' +
+        '(i.e., the sum of changes in Chinese exports of the same products in which ' +
+        'they experienced losses in the U.S. market) by region.',
       source: SRC_LINE
     },
     global_sector: {
       note:
-        'Note: The chart decomposes third-market gains (i.e., the sum of changes in ' +
-        'Chinese exports of the same products in which they experienced losses in the ' +
-        'U.S. market) by sector.',
+        'Note: The chart decomposes third-market gains and losses (i.e., the sum of ' +
+        'changes in Chinese exports of the same products in which they experienced ' +
+        'losses in the U.S. market) by sector.',
+      noteHtml:
+        'Note: The chart decomposes third-market gains <strong>and losses</strong> ' +
+        '(i.e., the sum of changes in Chinese exports of the same products in which ' +
+        'they experienced losses in the U.S. market) by sector.',
       source: SRC_LINE
     },
     panel: { note: '', source: '' }
@@ -87,7 +95,8 @@
       return;
     }
     var html = '';
-    if (entry.note)   html += escapeHTML(entry.note);
+    if (entry.noteHtml)   html += entry.noteHtml;
+    else if (entry.note)  html += escapeHTML(entry.note);
     if (entry.source) html += (html ? '<br>' : '') + escapeHTML(entry.source);
     noteEl.innerHTML = html;
   }
@@ -2212,9 +2221,9 @@
 
     var layout = {
       title: {
-        text: '<b>Global Trade Deflection — Interpretation</b><br>' +
+        text: '<b>Global Trade Deflection</b><br>' +
               '<span style="font-size:12px;font-weight:400;color:#555;">' +
-              'For every $1.00 lost in the U.S. market, China gained between $' +
+              'Interpretation: For every $1.00 lost in the U.S. market, China gained between $' +
               (lower != null ? lower.toFixed(2) : '—') + ' and $' +
               (upper != null ? upper.toFixed(2) : '—') + ' in third markets.</span>',
         font: { size: 16, family: FONT_FAMILY, color: '#111' },
@@ -2246,7 +2255,7 @@
 
     Plotly.react('main-chart', traces, layout, PLOTLY_CONFIG);
     noteEl.innerHTML =
-      '<em>Cumulative since February 2025. Range reflects sensitivity to outlier treatment.</em>' +
+      '<em>Note: Cumulative since February 2025. Range reflects sensitivity to outlier treatment.</em>' +
       '<br><em>Source: Trade Deflection Index based on Trade Data Monitor; IMF staff calculations.</em>';
   }
 
