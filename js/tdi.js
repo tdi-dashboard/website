@@ -78,12 +78,23 @@
         'losses in the U.S. market) by sector.',
       source: SRC_LINE
     },
+    disagg: {
+      note:
+        'Note: Cumulative since February 2025. Positive values suggest possible ' +
+        'trade deflection; negative values, a contraction across markets. Values ' +
+        'aggregate across products, sectors, and third markets, and each group\'s ' +
+        'value is its contribution to the overall index. See "How is it interpreted?" ' +
+        'for further detail.',
+      source: 'Source: Trade Deflection Index based on Trade Data Monitor; IMF staff calculations.'
+    },
     panel: { note: '', source: '' }
   };
 
   // Render a {note, source} entry into the on-screen note element, with the
   // source on its own line.
+  var currentNoteEntry = null;   // remembered so screenshots can embed it
   function setNote(entry) {
+    currentNoteEntry = entry || null;
     if (!entry || (!entry.note && !entry.source)) {
       noteEl.textContent = '';
       return;
@@ -128,11 +139,82 @@
   var COLOR_LOSS_BASE  = '#6C7480';
   var COLOR_LOSS_EXTRA = '#C4CAD2';
 
+  // Wrap a long string into lines of at most maxChars, for the screenshot
+  // annotation (Plotly annotations don't auto-wrap).
+  function wrapForAnnotation(text, maxChars) {
+    var words = String(text).split(/\s+/);
+    var lines = [], cur = '';
+    words.forEach(function (w) {
+      if ((cur + ' ' + w).trim().length > maxChars) {
+        if (cur) lines.push(cur);
+        cur = w;
+      } else {
+        cur = (cur ? cur + ' ' : '') + w;
+      }
+    });
+    if (cur) lines.push(cur);
+    return lines.join('<br>');
+  }
+
+  // Build the note+source as a single bottom-anchored annotation, used only
+  // when exporting an image so the screenshot carries the note and source.
+  function buildNoteAnnotation(entry) {
+    if (!entry || (!entry.note && !entry.source)) return null;
+    var parts = [];
+    if (entry.note)   parts.push(wrapForAnnotation(entry.note, 110));
+    if (entry.source) parts.push(wrapForAnnotation(entry.source, 110));
+    var text = parts.join('<br>');
+    return {
+      text: '<i>' + text + '</i>',
+      xref: 'paper', yref: 'paper',
+      x: 0, y: 0,
+      xanchor: 'left', yanchor: 'top',
+      yshift: -64,
+      showarrow: false, align: 'left',
+      font: { family: FONT_FAMILY, size: 10, color: '#555' }
+    };
+  }
+
+  // Custom mode-bar camera button: temporarily add the note annotation and a
+  // little extra bottom margin, render the PNG, then restore the live view.
+  var customCameraButton = {
+    name: 'Download image (with note)',
+    title: 'Download image (with note & source)',
+    icon: (typeof Plotly !== 'undefined' && Plotly.Icons) ? Plotly.Icons.camera : undefined,
+    click: function (gd) {
+      var ann = buildNoteAnnotation(currentNoteEntry);
+      var origAnns = (gd.layout.annotations || []).slice();
+      var origMarginB = (gd.layout.margin && gd.layout.margin.b != null) ? gd.layout.margin.b : null;
+      var restore = function () {
+        Plotly.relayout(gd, {
+          annotations: origAnns,
+          'margin.b': origMarginB
+        });
+      };
+      if (ann) {
+        var newMarginB = (origMarginB != null ? origMarginB : 80) + 80;
+        Plotly.relayout(gd, {
+          annotations: origAnns.concat([ann]),
+          'margin.b': newMarginB
+        }).then(function () {
+          return Plotly.downloadImage(gd, {
+            format: 'png', scale: 2,
+            filename: 'tdi-figure',
+            width: gd._fullLayout.width, height: gd._fullLayout.height
+          });
+        }).then(restore, restore);
+      } else {
+        Plotly.downloadImage(gd, { format: 'png', scale: 2, filename: 'tdi-figure' });
+      }
+    }
+  };
+
   var PLOTLY_CONFIG = {
     responsive: true,
     displayModeBar: true,
     modeBarButtonsToRemove: ['zoom2d','pan2d','select2d','lasso2d',
-                              'autoScale2d','toggleSpikelines'],
+                              'autoScale2d','toggleSpikelines','toImage'],
+    modeBarButtonsToAdd: [customCameraButton],
     displaylogo: false
   };
   var FONT_FAMILY = 'Georgia, "Times New Roman", serif';
@@ -2258,12 +2340,14 @@
     };
 
     Plotly.react('main-chart', traces, layout, PLOTLY_CONFIG);
-    noteEl.innerHTML =
-      '<em>Note: Cumulative since February 2025. Positive values suggest possible ' +
-      'trade deflection and negative values, a contraction across markets. ' +
-      'See "How is it interpreted?" for further detail. ' +
-      'Range reflects sensitivity to outlier treatment.</em>' +
-      '<br><em>Source: Trade Deflection Index based on Trade Data Monitor; IMF staff calculations.</em>';
+    setNote({
+      note:
+        'Note: Cumulative since February 2025. Positive values suggest possible ' +
+        'trade deflection and negative values, a contraction across markets. ' +
+        'See "How is it interpreted?" for further detail. ' +
+        'Range reflects sensitivity to outlier treatment.',
+      source: 'Source: Trade Deflection Index based on Trade Data Monitor; IMF staff calculations.'
+    });
   }
 
   function renderGlobalStackedBarChart() {
@@ -2623,7 +2707,7 @@
         line: { color: '#444', width: 2 }, layer: 'below' }
     ]);
     Plotly.react('main-chart', traces, layout, PLOTLY_CONFIG);
-    setNote(NOTES.panel);
+    setNote(NOTES.disagg);
     // Refresh the dual-color legend strip ABOVE the chart. In share view we
     // hide it entirely; in TDI view we surface red/blue swatches if both
     // signs are present in the bar values.
