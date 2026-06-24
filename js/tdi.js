@@ -2105,7 +2105,7 @@
       yaxis: { title: { text: 'USD gained or lost in third markets per $1.00 USD<br>of exports lost in the U.S. market',
                         font: { size: 11, family: FONT_FAMILY } },
                tickfont: { size: 12, family: FONT_FAMILY },
-               zeroline: true, zerolinecolor: '#444', zerolinewidth: 2,
+               zeroline: true, zerolinecolor: '#E8746A', zerolinewidth: 2,
                gridcolor: '#ececec' },
       legend: { orientation: 'h', x: 0, xanchor: 'left',
                 y: -0.18, yanchor: 'top',
@@ -2117,7 +2117,7 @@
       shapes: [
         { type: 'line', xref: 'paper', yref: 'y',
           x0: 0, x1: 1, y0: 0, y1: 0,
-          line: { color: '#444', width: 2 }, layer: 'below' },
+          line: { color: '#E8746A', width: 2 }, layer: 'below' },
         { type: 'line', xref: 'x', yref: 'paper',
           x0: '2025-02-01', x1: '2025-02-01', y0: 0, y1: 1,
           line: { color: '#C0392B', width: 1.8, dash: 'solid' } }
