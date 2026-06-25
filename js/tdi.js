@@ -2179,27 +2179,29 @@
         hovertemplate: '<b>%{x|%b %Y}</b>: %{y:.3f}<extra>TDI (excl. outliers)</extra>' }
     ];
     var layout = {
-      title: { text: '<b>Global Trade Deflection</b>',
+      title: { text: '<b>Global Trade Deflection</b><br>' +
+                     '<span style="font-size:12px;font-weight:400;color:#555;">' +
+                     'USD gained or lost in third markets per $1.00 USD of exports lost in the U.S. market</span>',
                font: { size: 16, family: FONT_FAMILY, color: '#111' },
                x: 0.5, xanchor: 'center', y: 0.97, yanchor: 'top' },
       xaxis: { type: 'date', tickformat: '%b-%y',
                tickfont: { size: 12, family: FONT_FAMILY } },
-      yaxis: { title: { text: 'USD gained or lost in third markets per $1.00 USD<br>of exports lost in the U.S. market',
-                        font: { size: 11, family: FONT_FAMILY } },
+      yaxis: { title: { text: 'Trade Deflection Index (TDI)',
+                        font: { size: 12, family: FONT_FAMILY } },
                tickfont: { size: 12, family: FONT_FAMILY },
-               zeroline: true, zerolinecolor: '#E8746A', zerolinewidth: 2,
+               zeroline: true, zerolinecolor: '#000', zerolinewidth: 2,
                gridcolor: '#ececec' },
       legend: { orientation: 'h', x: 0, xanchor: 'left',
                 y: -0.18, yanchor: 'top',
                 font: { size: 11, family: FONT_FAMILY } },
       paper_bgcolor: 'white', plot_bgcolor: 'white',
       font: { family: FONT_FAMILY },
-      margin: { l: 75, r: 25, t: 50, b: 90 },
+      margin: { l: 60, r: 25, t: 70, b: 90 },
       hovermode: 'x unified',
       shapes: [
         { type: 'line', xref: 'paper', yref: 'y',
           x0: 0, x1: 1, y0: 0, y1: 0,
-          line: { color: '#E8746A', width: 2 }, layer: 'below' },
+          line: { color: '#000', width: 2 }, layer: 'above' },
         { type: 'line', xref: 'x', yref: 'paper',
           x0: '2025-02-01', x1: '2025-02-01', y0: 0, y1: 1,
           line: { color: '#C0392B', width: 1.8, dash: 'solid' } }
